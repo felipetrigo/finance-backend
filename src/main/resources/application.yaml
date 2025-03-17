@@ -24,4 +24,13 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+security:
+  config:
+    prefix: Bearer
+    key: SECRET_KEY
+    expiration: 86400
 
+roles:
+  user:
+    - "USER"
+    - "MANAGER"

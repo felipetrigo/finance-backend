@@ -31,31 +31,32 @@ public class CustomerController {
         log.info(String.format("Response clientes ativos - %S",list));
         return ResponseEntity.ok(list
                 .stream()
-                .map(it -> new ClientResponseDTO(it.getId(), it.getName(), it.getSalary(),it.getPhoneNumber(), it.getEmail()))
+                .map(it -> new ClientResponseDTO(it.getName(), it.getSalary(),it.getPhoneNumber(), it.getEmail()))
                 .collect(Collectors.toList()));
     }
     @GetMapping("/get")
-    public ResponseEntity<ClientResponseDTO> getClient() throws Exception {
-        log.info(String.format("Request cliente ativos by id - %d",1));
-        var original = clientService.find(1L);
-        log.info(String.format("Response cliente ativos by id: %d - response: %S",1,original));
-        return ResponseEntity.ok(new ClientResponseDTO(original.getId(), original.getName(), original.getSalary(),original.getPhoneNumber(),original.getEmail()));
+    public ResponseEntity<ClientResponseDTO> getClient(String username) throws Exception {
+        log.info(String.format("Request cliente ativos by id - %s",username));
+        var original = clientService.findByName(username);
+        log.info(String.format("Response cliente ativos by id: %s - response: %S",username,original));
+        return ResponseEntity.ok(new ClientResponseDTO(original.getName(), original.getSalary(),original.getPhoneNumber(),original.getEmail()));
     }
 
     @PostMapping("/save")
     public ResponseEntity<ClientResponseDTO> saveClient(@RequestBody ClientRequestDTO c) {
         log.info(String.format("Request salvar cliente %S",c));
-        Client original = clientService.save(new Client(null,
-                c.getName(),
-                c.getSalary(),
-                c.getPhoneNumber(),
-                c.getEmail(),
-                false,
-                null));
+        Client original = clientService.save(Client.builder()
+                        .name(c.getName())
+                        .username(c.getUsername())
+                        .password(c.getPassword())
+                        .phoneNumber(c.getPhoneNumber())
+                        .salary(c.getSalary())
+                        .email(c.getEmail())
+                .build());
         log.info(String.format("Response salvar cliente %S",original));
         return ResponseEntity
                 .status(201)
-                .body(new ClientResponseDTO(original.getId(), original.getName(), original.getSalary(),original.getPhoneNumber(),original.getEmail()));
+                .body(new ClientResponseDTO(original.getName(), original.getSalary(),original.getPhoneNumber(),original.getEmail()));
     }
 
     @PutMapping("/add/spent")
@@ -67,6 +68,6 @@ public class CustomerController {
                 null,
                 spent.getName()));
         log.info(String.format("Response salvar gastos id de cliente: %d - response: %S",id,original));
-        return ResponseEntity.ok(new ClientResponseDTO(original.getId(), original.getName(), original.getSalary(),original.getPhoneNumber(),original.getEmail()));
+        return ResponseEntity.ok(new ClientResponseDTO(original.getName(), original.getSalary(),original.getPhoneNumber(),original.getEmail()));
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,24 +15,29 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
-@Table(name = "tb_client")
+@Table(name = "tb_user")
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     @NotNull(message = "name can't be null")
     @NotBlank(message = "name can't be blank")
     private String name;
-
-
+    private String username;
+    private String password;
     @NotNull(message = "salary can't be null")
     private Double salary;
     @Column(name = "phone")
     private String phoneNumber;
     private String email;
-    private Boolean deleted;
+    private Boolean deleted = Boolean.FALSE;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "tab_user_roles", joinColumns =  @JoinColumn(name = "user_id"))
+    @Column(name = "role_id")
+    private List<String> roles = List.of("USER");
     @OneToMany
     @JoinColumn(name = "client_id")
-    private List<Spent> spents;
+    private List<Spent> spents = new ArrayList<>();
 }
