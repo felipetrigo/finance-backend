@@ -31,6 +31,6 @@ security:
     expiration: 86400
 
 roles:
-  user:
-    - "USER"
-    - "MANAGER"
+  user: >
+    USER,
+    MANAGER

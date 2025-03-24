@@ -10,11 +10,11 @@ import java.util.List;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client,Long> {
-    @Query("select c from Client c where c.user_id = :id and c.deleted = false")
+    @Query("select c from Client c where c.id = :id and c.deleted = false")
     Client findAtiveClient(@Param("id") Long id);
     @Query("select c from Client c where c.deleted = false")
     List<Client> findAllAtiveClient();
-    @Query("select c from Client c where c.user_id = :id and c.deleted = true")
+    @Query("select c from Client c where c.id = :id and c.deleted = true")
     Client findDeletedClient(@Param("id") Long id);
     @Query("select c from Client c where c.deleted = true")
     List<Client> findAllDeletedClient();

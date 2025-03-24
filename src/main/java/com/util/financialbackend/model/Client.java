@@ -38,6 +38,6 @@ public class Client {
     @Column(name = "role_id")
     private List<String> roles = List.of("USER");
     @OneToMany
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "user_id")
     private List<Spent> spents = new ArrayList<>();
 }

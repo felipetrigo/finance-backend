@@ -5,6 +5,7 @@ import com.util.financialbackend.model.Spent;
 import com.util.financialbackend.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,7 @@ public class ClientService {
     private ClientRepository repository;
     @Autowired
     private SpentService service;
-    @Autowired
-    private PasswordEncoder encoder;
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public Client save(Client c) {
         Client clientFound = repository.findByUsername(c.getUsername());

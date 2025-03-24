@@ -1,2 +1,0 @@
-INSERT INTO tab_user_roles(role_id,user_id) VALUES (1,1), (2,1);
-INSERT INTO tb_user (user_id, name,salary,phone,email,deleted,role_id) VALUES (1, 'Jonas',5000.0,'11 98743 4050','jonas@gmail.com',false,"MANAGER");
