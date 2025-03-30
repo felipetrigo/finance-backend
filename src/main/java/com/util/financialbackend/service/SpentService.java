@@ -24,7 +24,7 @@ public class SpentService {
     public Spent find(Long id) throws Exception {
         var temp = repository.findById(id);
         if(temp.isEmpty()){
-            throw new Exception("Spent not found by id:"+id);
+            throw new RuntimeException("Spent not found by id:"+id);
         }
         return temp.get();
     }
@@ -43,7 +43,7 @@ public class SpentService {
             total.set(total.get() + it.getPrice());
         });
         if(total.get() >= 5500.0){
-            throw new Exception("exceded salary");
+            throw new RuntimeException("exceded salary");
         }
         return repository.save(temp);
     }

@@ -2,28 +2,26 @@ package com.util.financialbackend.controller;
 
 import com.google.gson.Gson;
 import com.util.financialbackend.security.DTO.Login;
-import com.util.financialbackend.security.DTO.Sessao;
+import com.util.financialbackend.security.DTO.Token;
 import com.util.financialbackend.service.LoginService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+@RequestMapping("/v1/users")
 public class LoginController {
+    @Autowired
     private LoginService service;
+    @Autowired
     private Gson gson;
+
     @PostMapping("/login")
-    public ResponseEntity<Sessao> logar(@RequestBody Login login){
-        log.info(String.format("Request: %s",gson.toJson(login)));
-        Sessao sessao = service.generateSession(login);
-        log.info(String.format("Response: %s",sessao));
-        return ResponseEntity.ok(sessao);
+    public ResponseEntity<Token> logar(@RequestBody Login login) {
+        log.info(String.format("request:%s", gson.toJson(login)));
+        return ResponseEntity.ok(service.login(login));
     }
 }

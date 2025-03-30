@@ -2,11 +2,12 @@ package com.util.financialbackend.service;
 
 import com.util.financialbackend.model.Client;
 import com.util.financialbackend.model.Spent;
+import com.util.financialbackend.model.UserRole;
 import com.util.financialbackend.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,16 +24,28 @@ public class ClientService {
     private SpentService service;
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public Client save(Client c) {
-        Client clientFound = repository.findByUsername(c.getUsername());
+    public Client saveVerifying(Client c) {
+        Client clientFound = repository.findClientByUsername(c.getUsername());
         if(clientFound!=null){
             throw new RuntimeException("usuario ja existente");
         }
         //nova logica para encodar senha
-        c.setPassword(encoder.encode(c.getPassword()));
+        clientBuilding(c);
+        return repository.save(c);
+    }
+    public Client save(Client c) {
+        clientBuilding(c);
+        return repository.save(c);
+    }
+    public Client update(Client c){
         return repository.save(c);
     }
 
+    private void clientBuilding(Client c){
+        c.setPassword(encoder.encode(c.getPassword()));
+        c.setDeleted(Boolean.FALSE);
+        c.setRole(UserRole.USER);
+    }
     public List<Client> list() {
         return repository.findAll();
     }
@@ -41,17 +54,24 @@ public class ClientService {
         return repository.findAllAtiveClient();
     }
 
-    public Client findByName(String id) throws Exception {
-        Client client = repository.findByUsername(id);
+    public Client findByName(String name) {
+        Client client = repository.findClientByUsername(name);
         if (client == null) {
-            throw new Exception("Client not found by id" + id);
+            throw new RuntimeException("Client not found by id:" + name);
+        }
+        return client;
+    }
+    public UserDetails findByUsername(String name) {
+        UserDetails client = repository.findByUsername(name);
+        if (client == null) {
+            throw new RuntimeException("Client not found by id:" + name);
         }
         return client;
     }
     public Client find(Long id) throws Exception {
         Optional<Client> client = repository.findById(id);
         if (client.isEmpty()) {
-            throw new Exception("Client not found by id" + id);
+            throw new RuntimeException("Client not found by id:" + id);
         }
         return client.get();
     }
@@ -63,9 +83,9 @@ public class ClientService {
         return repository.save(temp);
     }
 
-    public Client addSpent(Long idClient, Spent spent) throws Exception {
+    public Client addSpent(String username, Spent spent) throws Exception {
 
-        Client temp = find(idClient);
+        Client temp = findByName(username);
         List<Spent> spents = temp.getSpents();
         AtomicReference<Double> total = new AtomicReference<>(0.0);
         spents.add(spent);
@@ -76,7 +96,7 @@ public class ClientService {
             total.set(total.get() + it.getPrice());
         });
         if (total.get() >= temp.getSalary()) {
-            throw new Exception("exceded salary");
+            throw new RuntimeException("exceded salary");
         }
         service.save(spent);
         temp.setSpents(spents);

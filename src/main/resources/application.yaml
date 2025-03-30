@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:uniqueDBNotReacheble
     username: root
-    password: root
+    password: ${PASSWORD:root}
     driverClassName: org.h2.Driver
   jpa:
     defer-datasource-initialization: true
@@ -27,10 +27,11 @@ springdoc:
 security:
   config:
     prefix: Bearer
-    key: SECRET_KEY
-    expiration: 86400
+    key: ${SECRET_KEY:"Default_Secret"}
+    expiration: 24
 
-roles:
-  user: >
-    USER,
-    MANAGER
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

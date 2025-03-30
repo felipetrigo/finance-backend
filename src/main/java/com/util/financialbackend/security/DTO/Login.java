@@ -1,22 +1,7 @@
 package com.util.financialbackend.security.DTO;
 
-public class Login {
-    private String username;
-    private String password;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+public record Login(@NotNull @NotEmpty String username, @NotNull @NotEmpty String password) {
 }

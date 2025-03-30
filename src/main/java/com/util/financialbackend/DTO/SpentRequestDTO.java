@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @ToString
 public class SpentRequestDTO {
-
+    private String clientUsername;
     private Double price;
     private String name;
 }
