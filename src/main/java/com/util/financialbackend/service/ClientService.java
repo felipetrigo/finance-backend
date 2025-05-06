@@ -54,6 +54,11 @@ public class ClientService {
         return repository.findAllAtiveClient();
     }
 
+    public List<Spent> listSpentsByUsername(String username){
+        var c = findByName(username);
+        return c.getSpents();
+    }
+
     public Client findByName(String name) {
         Client client = repository.findClientByUsername(name);
         if (client == null) {

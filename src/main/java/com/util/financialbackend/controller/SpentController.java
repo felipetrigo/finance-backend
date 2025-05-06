@@ -41,11 +41,11 @@ public class SpentController {
         return ResponseEntity.ok(service.find(id));
     }
     @GetMapping("/query")
-    public ResponseEntity<ClientSpentsResponseDTO> getSpentsByClientId(@Param("id") Long id) throws Exception {
-        log.info(String.format("Request query spents by client id: %d",id));
-        Client c = clientService.find(id);
-        log.info(String.format("Response query spents by client id: %d - response: %S",id,c));
-        return ResponseEntity.ok(new ClientSpentsResponseDTO(c.getId(),c.getName(),c.getSalary(),c.getSpents()));
+    public ResponseEntity<List<Spent>> getSpentsByClientId(@Param("username") String username) throws Exception {
+        log.info(String.format("Request query spents by client username: %s",username));
+        List<Spent> c = clientService.listSpentsByUsername(username);
+        log.info(String.format("Response query spents by client username: %s - response: %S",username,c));
+        return ResponseEntity.ok(c);
     }
     @PutMapping("/update")
     public ResponseEntity<Spent> updateSpents(@RequestBody Spent update) throws Exception {
