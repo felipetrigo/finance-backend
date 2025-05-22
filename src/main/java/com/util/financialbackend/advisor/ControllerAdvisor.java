@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -18,6 +19,11 @@ public class ControllerAdvisor {
     public ResponseEntity<Error> advise(RuntimeException e){
         log.info(String.format("exception:%s",e));
         return ResponseEntity.status(500).body(new Error(e.getMessage()));
+    }
+    @ExceptionHandler({BadCredentialsException.class})
+    public ResponseEntity<Error> adviseCredentials(BadCredentialsException e){
+        e.printStackTrace();
+        return  ResponseEntity.status(500).body(new Error(e.getMessage()));
     }
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public void notAdvise(){

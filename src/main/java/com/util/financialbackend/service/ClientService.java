@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,8 @@ public class ClientService {
     private ClientRepository repository;
     @Autowired
     private SpentService service;
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Client saveVerifying(Client c) {
         Client clientFound = repository.findClientByUsername(c.getUsername());
@@ -42,7 +44,7 @@ public class ClientService {
     }
 
     private void clientBuilding(Client c){
-        c.setPassword(encoder.encode(c.getPassword()));
+        c.setPassword(passwordEncoder.encode(c.getPassword()));
         c.setDeleted(Boolean.FALSE);
         c.setRole(UserRole.USER);
     }

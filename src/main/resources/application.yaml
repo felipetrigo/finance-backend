@@ -2,6 +2,8 @@ server:
   servlet:
     context-path: /finance-solution
 spring:
+  main:
+    allow-circular-references: true
   h2:
     console.enabled: true
     console:
@@ -9,6 +11,9 @@ spring:
       settings.trace: true
       settings.web-allow-others: true
   datasource:
+    hikari:
+      maximum-pool-size: 10
+      leak-detection-threshold: 2000
     url: jdbc:h2:mem:uniqueDBNotReacheble
     username: root
     password: ${PASSWORD:root}
@@ -28,7 +33,7 @@ security:
   config:
     prefix: Bearer
     key: ${SECRET_KEY:"Default_Secret"}
-    expiration: 24
+    expiration: 1
 
 logging:
   level:

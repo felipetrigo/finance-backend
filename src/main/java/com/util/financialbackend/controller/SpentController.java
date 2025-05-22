@@ -4,6 +4,7 @@ import com.util.financialbackend.DTO.ClientSpentsResponseDTO;
 import com.util.financialbackend.DTO.SpentRequestDTO;
 import com.util.financialbackend.model.Client;
 import com.util.financialbackend.model.Spent;
+import com.util.financialbackend.security.DTO.SpentDTO;
 import com.util.financialbackend.service.ClientService;
 import com.util.financialbackend.service.SpentService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -48,7 +49,7 @@ public class SpentController {
         return ResponseEntity.ok(c);
     }
     @PutMapping("/update")
-    public ResponseEntity<Spent> updateSpents(@RequestBody Spent update) throws Exception {
+    public ResponseEntity<Spent> updateSpents(@RequestBody SpentDTO update) throws Exception {
         log.info(String.format("Request Update spent: %S",update));
         var response = service.update(update, update.getId());
         log.info(String.format("Response Update spent: %S",response));

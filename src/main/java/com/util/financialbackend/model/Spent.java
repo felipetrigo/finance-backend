@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @ToString
 @Table(name = "tb_spent")
 public class Spent {
