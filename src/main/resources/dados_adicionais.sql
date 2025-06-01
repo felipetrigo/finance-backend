@@ -1,0 +1,39 @@
+CREATE TABLE TB_USER (
+    ID SERIAL PRIMARY KEY NOT NULL,
+    DELETED BOOLEAN,
+    EMAIL CHARACTER VARYING(255),
+    NAME CHARACTER VARYING(255),
+    PHONE CHARACTER VARYING(255),
+    PASSWORD CHARACTER VARYING(255),
+    USERNAME CHARACTER VARYING(255),
+    ROLE INT,
+    SALARY FLOAT(53)
+);
+
+CREATE TABLE TB_SPENT (
+    ID SERIAL PRIMARY KEY NOT NULL,
+    NAME CHARACTER VARYING(255),
+    PERCENTAGE FLOAT(53),
+    PRICE FLOAT(53),
+    USER_ID BIGINT NOT NULL,
+    CONSTRAINT FK_USER FOREIGN KEY (USER_ID) REFERENCES TB_USER(ID)
+);
+
+INSERT INTO TB_USER (DELETED, EMAIL, NAME, PHONE, PASSWORD, USERNAME, ROLE, SALARY)
+VALUES
+    (false, 'joao.silva@email.com', 'João Silva', '(11) 99999-9999', 'senha123', 'joao.silva', 1, 5000.00),
+    (false, 'maria.souza@email.com', 'Maria Souza', '(21) 98888-8888', 'mariasegura', 'maria.s', 2, 6500.50),
+    (true, 'carlos.inativo@email.com', 'Carlos Mendes', '(31) 97777-7777', 'carlos123', 'carlos.m', 1, 4200.75);
+
+INSERT INTO TB_SPENT (NAME, PERCENTAGE, PRICE, USER_ID)
+VALUES
+    ('Aluguel', 30.0, 1500.00, 1),
+    ('Supermercado', 15.5, 775.00, 1),
+    ('Transporte', 10.0, 500.00, 2),
+    ('Lazer', 8.2, 533.00, 2),
+    ('Saúde', 12.3, 516.60, 3),
+    ('Educação', 20.0, 840.00, 3);
+
+SELECT * FROM TB_USER;
+
+SELECT * FROM TB_SPENT;
